@@ -27,7 +27,19 @@ exports.create = (req, res) =>{
 
 //get all categories
 exports.getAll = (req, res) =>{
-    Category.findAll().then(categories =>{
+    let promise 
+    //Implement query parama
+    const categoryName = req.query.name
+    if(categoryName){
+        promise = Category.findAll({
+            where : {
+                name : categoryName
+            }
+        })
+    }else {
+        promise = Category.findAll()
+    }
+    promise.then(categories =>{
         res.status(200).send(categories)
     }).catch(err =>{
         console.log("Internal server error");
@@ -59,4 +71,43 @@ exports.findOne = async(req, res) =>{
         })
     }
 
+}
+
+//Update the category
+exports.update = async(req, res) =>{
+    try{
+        // need to parse the request body
+        const category = {
+            name : req.body.name,
+            description : req.body.description
+        }
+
+        // need to know which category has to be updated
+        const categoryId = req.params.id
+
+        //update the category
+        const updatedCategory = await Category.update(category, {
+            where : {id : categoryId},
+            returning : true
+        })
+
+        //res.status(200).send(updatedCategory)
+
+        //Return the updated category
+        const returnCategory = await Category.findByPk(categoryId)
+        if(returnCategory){
+             res.status(200).send(returnCategory)
+             //console.log(category);
+        }else{
+            return res.status(404).send({
+                message : "There is no such category exist with this category Id :"
+            })
+        }
+
+    }catch(err){
+        console.log("Error while updating the category based on CategoryId", err.message);
+        res.status(500).send({
+            message : "Internal server error"
+        })
+    }
 }

@@ -9,4 +9,6 @@ module.exports = (app) =>{
     app.get('/ecom/api/v1/categories', categoryController.getAll)
 
     app.get('/ecom/api/v1/categories/:id', categoryController.findOne)
+
+    app.put('/ecom/api/v1/categories/:id', categoryController.update)
 }
