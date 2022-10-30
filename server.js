@@ -11,6 +11,10 @@ app.use(bodyParser.json())
 //Code for table initialization
 const db  = require('./models')
 const Category = db.category
+const Product = db.product
+
+//set the relation between tables
+
 
 //Create the table
 db.sequelize.sync().then(()=>{
@@ -18,6 +22,8 @@ db.sequelize.sync().then(()=>{
 }).catch((err)=>{
     console.log(err.message);
 })
+
+Category.hasMany(Product)
 
 //Routing
 require('./routes/category.route')(app)

@@ -9,7 +9,8 @@ exports.create = async(req, res) =>{
     const product   = {
         name : req.body.name,
         description : req.body.description,
-        cost : req.body.cost
+        cost : req.body.cost,
+        categoryId: req.body.categoryId
     }
 
     try{

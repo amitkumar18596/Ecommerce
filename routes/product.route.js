@@ -2,10 +2,11 @@
  * Routing : Writing the REST APIs
  */
 const productController = require('../controllers/product.controller')
+const { requestValidator } = require('../middlewares')
 
 module.exports = (app) =>{
     // Route for creating new product
-    app.post('/ecom/api/v1/products', productController.create)
+    app.post('/ecom/api/v1/products', [requestValidator.validateProductBody], productController.create)
 
     //Route for getting all products
     app.get('/ecom/api/v1/products', productController.findAll)
