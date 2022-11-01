@@ -24,7 +24,7 @@ exports.signUp = async(req, res) =>{
     //create the user obj in database
     try{
         const userCreated = await User.create(userObj)
-        res.status(201).send("User created")
+        //res.status(201).send("User created")
 
         // Need to provide correct role to the user
         if(req.body.roles){
@@ -43,7 +43,7 @@ exports.signUp = async(req, res) =>{
             // set the roles
             await userCreated.setRoles(roles)
             console.log("Registartion completed");
-            res.status(201).send("User successfully registered")
+            return res.status(201).send("User successfully registered")
         }else{
             /**
              * 2 options
@@ -61,7 +61,7 @@ exports.signUp = async(req, res) =>{
 
             */
            await userCreated.setRoles([1]) // default role will be customer if user has not provided any role hence id=1 is put here
-           res.status(201).send("User successfully registered")
+           return res.status(200).send("User successfully registered")
         }
 
     }catch(err){
