@@ -28,7 +28,7 @@ db.category = require('./category.model')(sequelize, Sequelize)
 db.product = require('./product.model')(sequelize, Sequelize)
 db.user = require('./user.model')(sequelize, Sequelize)
 db.role = require('./role.model')(sequelize, Sequelize)
-
+db.cart = require('./cart.model')(sequelize, Sequelize)
 /**
  * 1. Many to many relationship 
  * 2. Here role and user are of M2M relationship
@@ -46,5 +46,23 @@ db.user.belongsToMany(db.role, {
 });
 
 db.ROLES = ["customer", "admin"]
+
+/**
+ * Establish relation between 
+ * 1. user and cart : one to many
+ * 2. cart and product : many to many
+ */
+db.user.hasMany(db.cart)
+
+db.product.belongsToMany(db.cart, {
+    through : "cart_products",
+    foreignKey : "cart_id",
+    otherKey : "product_id"
+})
+db.cart.belongsToMany(db.product, {
+    through : "cart_products",
+    foreignKey : "product_id",
+    otherKey : "cart_id"
+})
 
 module.exports = db
